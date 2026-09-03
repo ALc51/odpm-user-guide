@@ -22,6 +22,7 @@
       --shadow: 0 12px 32px rgba(23, 33, 43, .09);
     }
     * { box-sizing: border-box; }
+    html { overflow-x: hidden; }
     body {
       margin: 0;
       color: var(--ink);
@@ -36,14 +37,14 @@
       border-bottom: 6px solid #e1ad41;
     }
     .eyebrow { margin: 0 0 8px; color: #b9e7ce; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
-    h1 { max-width: 760px; margin: 0; font-size: clamp(32px, 5vw, 58px); line-height: 1.15; letter-spacing: 0; }
+    h1 { max-width: 760px; margin: 0; font-size: 52px; line-height: 1.15; letter-spacing: 0; }
     .lead { max-width: 720px; margin: 18px 0 0; color: #e3f4ea; font-size: 18px; }
     .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
     .meta span { padding: 4px 11px; border: 1px solid rgba(255,255,255,.35); border-radius: 4px; color: #f6fffa; font-size: 13px; }
     main { padding: 34px 0 70px; }
     .notice { padding: 18px 20px; border-left: 5px solid var(--amber); background: var(--amber-soft); box-shadow: var(--shadow); }
     .notice strong { color: #754800; }
-    nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 26px 0; }
+    nav { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 26px 0; }
     nav a { padding: 13px 14px; color: var(--blue); background: var(--paper); border: 1px solid var(--line); text-decoration: none; font-weight: 700; }
     nav a:hover { border-color: var(--blue); }
     section { margin-top: 38px; padding-top: 4px; }
@@ -65,7 +66,7 @@
     .tag { display: inline-block; padding: 1px 7px; border-radius: 3px; color: var(--blue); background: var(--blue-soft); font-size: 13px; font-weight: 700; }
     .warn { padding: 16px 18px; background: var(--red-soft); border: 1px solid #f2c2bd; }
     .warn strong { color: var(--red); }
-    .wechat { padding: 18px 20px; color: #214334; background: #e8f6ed; border: 1px solid #b8dfc6; }
+    .wechat { padding: 18px 20px; color: #214334; background: #e8f6ed; border: 1px solid #b8dfc6; overflow-wrap: anywhere; }
     .wechat strong { color: var(--green); }
     code { padding: 2px 5px; color: #25533e; background: #edf4f0; border-radius: 3px; font-family: Consolas, monospace; font-size: .92em; }
     .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--paper); }
@@ -102,6 +103,14 @@
       th, td { padding: 9px; }
       code { overflow-wrap: anywhere; }
     }
+    @media (max-width: 380px) {
+      .wrap { width: calc(100% - 18px); }
+      h1 { font-size: 28px; }
+      .meta { display: block; }
+      .meta span { display: inline-block; margin: 3px 4px 3px 0; }
+      .step { grid-template-columns: 28px 1fr; padding-left: 8px; padding-right: 8px; }
+      .num { width: 27px; height: 27px; font-size: 13px; }
+    }
     @media print {
       body { background: white; }
       header { padding: 28px 0; }
@@ -116,7 +125,7 @@
     <div class="wrap">
       <p class="eyebrow">ODPM DISPUTE AUTOMATION · USER GUIDE</p>
       <h1>争议交易辅助处理脚本<br>用户教程</h1>
-      <p class="lead">帮助你在订单查询完成后，先确认订单数量，再可控地批量联系消费者。关键确认仍由用户完成，脚本只负责处理当前页面结果。</p>
+      <p class="lead">只介绍脚本面板的使用方法：确认处理数量，选择运行模式，随时查看进度并控制任务。</p>
       <div class="meta"><span>脚本版本 0.7.0</span><span>适用页面：dispute-transactions</span><span>支持 UI 模式 / API 模式</span></div>
     </div>
   </header>
@@ -124,25 +133,11 @@
     <div class="notice"><strong>重要提示：</strong>本脚本会执行真实的“是否联系消费者”操作。开始前请核对当前页面、订单总数和处理数量；API 模式速度更快，但应先完成一次人工操作以捕获认证信息和请求格式。</div>
 
     <nav aria-label="教程目录">
-      <a href="#prepare">一、准备工作</a><a href="#run">二、开始处理</a><a href="#monitor">三、监控与排错</a>
+      <a href="#run">一、开始处理</a><a href="#monitor">二、监控与排错</a>
     </nav>
 
-    <section id="prepare">
-      <h2>一、准备工作</h2>
-      <div class="grid">
-        <div class="card"><h3>安装用户脚本管理器</h3><p>浏览器需要先安装 脚本猫、油管猴 等用户脚本管理器。将 <code>odpm-dispute-automation.user.js</code> 导入并启用。</p></div>
-        <div class="card"><h3>打开正确页面</h3><p>登录 ODPM 后进入 <code>https://odpm.oceanpayment.com/dispute-transactions</code>。页面加载完成后，右上角会出现“ODPM辅助处理”面板。</p></div>
-      </div>
-      <div class="checklist">
-        <div class="check">确认账号具有处理争议交易的权限。</div>
-        <div class="check">确认当前页面已经加载完成，表格和分页组件可见。</div>
-        <div class="check">首次使用建议先点击一次页面原有的“是否联系消费者”，并在弹窗中点击“确定”。</div>
-      </div>
-      <div class="wechat"><strong>在微信中打开：</strong>电脑本地的 HTML 文件无法直接在微信内打开。请先将本教程上传到公司静态网站、Web 服务器或 GitHub Pages，获得以 <code>https://</code> 开头的网页地址，再把该地址发送到微信。微信只能打开可访问的网页链接，不能直接访问你电脑上的文件路径。</div>
-    </section>
-
     <section id="run">
-      <h2>二、开始批量处理</h2>
+      <h2>一、开始批量处理</h2>
       <h3>UI 模式：推荐首次使用</h3>
       <p>UI 模式会模拟人工逐单点击，速度较慢，但过程最直观。</p>
       <div class="step"><span class="num">1</span><div><strong>设置处理数量</strong><p>“处理数量”留空或填 <code>0</code> 表示处理全部；填写正整数表示最多处理指定数量。建议首次先填写较小数量进行验证。</p></div></div>
@@ -161,8 +156,8 @@
     </section>
 
     <section id="monitor">
-      <h2>三、监控、日志与排错</h2>
-      <table>
+      <h2>二、监控、日志与排错</h2>
+      <div class="table-scroll"><table>
         <thead><tr><th>面板功能</th><th>用途</th><th>注意事项</th></tr></thead>
         <tbody>
           <tr><td>进度信息</td><td>显示已处理数量、成功、失败、跳过、当前页、当前订单和用时。</td><td>失败订单不会阻塞后续订单，处理结束后查看失败日志。</td></tr>
@@ -170,7 +165,7 @@
           <tr><td>显示日志</td><td>查看普通操作日志、警告和错误详情。</td><td>日志最多保留最近 500 条。</td></tr>
           <tr><td>导出日志</td><td>下载当前日志为文本文件，便于留档或反馈问题。</td><td>日志可能包含订单标识，请按公司规定保存和传递。</td></tr>
         </tbody>
-      </table>
+      </table></div>
       <h3>常见问题</h3>
       <div class="grid">
         <div class="card"><h3>面板没有出现</h3><p>确认脚本已启用、页面地址匹配，并刷新页面。若仍无面板，检查用户脚本管理器的控制台错误。</p></div>
@@ -184,7 +179,7 @@
     <section>
       <h2>每次执行前的快速检查</h2>
       <div class="checklist">
-        <div class="check">当前页面已经完成查询，表格内容与业务预期一致。</div>
+        <div class="check">当前订单列表已经加载完成，表格内容与业务预期一致。</div>
         <div class="check">查询结果总数和可联系订单数量已核对。</div>
         <div class="check">处理数量没有超过本次应处理范围。</div>
         <div class="check">已确认当前账号、页面和订单状态正确。</div>
